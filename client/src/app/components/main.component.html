@@ -1,10 +1,26 @@
+<div class="result-section">
+    <h2><u>Last Result</u></h2>
+    <div class="result-item">
+      <span><b>Restaurant:</b></span>
+      <span>&nbsp;{{ resultRestaurant }}</span>
+    </div>
+    <div class="result-item">
+      <span><b>Date:</b></span>
+      <span>&nbsp;{{ resultDate }}</span>
+    </div>
+    <div class="result-item">
+      <span><b>Meal:</b></span>
+      <span>&nbsp;{{ resultMeal }}</span>
+    </div>
+</div>  
+  
 <form [formGroup]="drawLotForm" (ngSubmit)="processForm()">
     <table>
 
         <tr>
             <td>Date:</td>
             <td>
-                <input type="text" placeholder="Date" size="30" formControlName="date">
+                <input type="text" placeholder="ddmmyyyy" size="30" formControlName="date">
                 <div *ngIf="drawLotForm.get('date')?.invalid && drawLotForm.get('date')?.dirty">
                     Please enter the date
                 </div>
@@ -28,10 +44,10 @@
         </tr>
         <tr>
             <td></td>
-            <td>
+            <!-- <td>
                 <div>invalid: {{ drawLotForm.invalid }}, valid: {{ drawLotForm.valid }}</div>
                 <div>pristine: {{ drawLotForm.pristine }}, dirty: {{ drawLotForm.dirty }}</div>
-            </td>
+            </td> -->
         </tr>
     </table>
 

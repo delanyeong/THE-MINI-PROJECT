@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Lot, LotDraw } from '../models';
+import { DrawLotService } from '../drawlot.service';
 
 @Component({
   selector: 'app-main',
@@ -12,8 +13,11 @@ export class MainComponent implements OnInit{
 
   drawLotForm!: FormGroup
   lotArray!: FormArray
+  resultRestaurant: string = ' No Lots Drawn Yet';
+  resultDate: string = '';
+  resultMeal: string = '';
 
-  constructor (private fb: FormBuilder) { }
+  constructor (private fb: FormBuilder, private drawLotSvc: DrawLotService) { }
 
   ngOnInit(): void {
       this.drawLotForm = this.createForm()
@@ -31,6 +35,20 @@ export class MainComponent implements OnInit{
   processForm() {
     const lotDraw : LotDraw = this.drawLotForm.value as LotDraw
     console.info('>>> lotDraw: ', lotDraw)
+
+    this.drawLotSvc.drawLot(lotDraw) //returns an observable
+      //convert it into a promise
+      .then(response => {
+        console.info(`result: ${response.result}`)
+        this.resultRestaurant = response.result
+        this.resultDate = response.date
+        this.resultMeal = response.meal
+        // clearing form after submitting
+        this.drawLotForm = this.createForm()
+      })
+      .catch (error => {
+        console.error('>>> error: ', error)
+      })
   }
 
   addLot() {

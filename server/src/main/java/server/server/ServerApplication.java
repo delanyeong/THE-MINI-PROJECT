@@ -12,9 +12,4 @@ public class ServerApplication {
 		SpringApplication.run(ServerApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new EnableCORS("/api/*", "*");
-	}
-
 }
