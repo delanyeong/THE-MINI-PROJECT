@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './components/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
-import { PostService } from './post.service';
 
 
 
@@ -21,7 +20,7 @@ import { PostService } from './post.service';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [PostService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

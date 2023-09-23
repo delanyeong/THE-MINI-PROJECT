@@ -1,2 +1,60 @@
+<form [formGroup]="drawLotForm" (ngSubmit)="processForm()">
+    <table>
 
+        <tr>
+            <td>Date:</td>
+            <td>
+                <input type="text" placeholder="Date" size="30" formControlName="date">
+                <div *ngIf="drawLotForm.get('date')?.invalid && drawLotForm.get('date')?.dirty">
+                    Please enter the date
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Meal:</td>
+            <td>
+                <input type="text" placeholder="Lunch, Dinner etc" size="30" formControlName="meal">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="button" (click)="clearForm()">Clear</button>
+                <button type="submit" [disabled]="invalid()">
+                    Save
+                </button>
+                <button type="button" (click)="addLot()">Add Lot</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div>invalid: {{ drawLotForm.invalid }}, valid: {{ drawLotForm.valid }}</div>
+                <div>pristine: {{ drawLotForm.pristine }}, dirty: {{ drawLotForm.dirty }}</div>
+            </td>
+        </tr>
+    </table>
 
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Restaurant</th>
+            </tr>
+        </thead>
+        <tbody formArrayName="lots">
+            <tr *ngFor="let t of lotArray.controls; let i = index" [formGroup]="t">
+                <td>
+                    <input type="text" size="30" placeholder="Name" formControlName="name">
+                </td>
+                <td>
+                    <input type="text" size="30" placeholder="Restaurant" formControlName="restaurant">
+                </td>
+                <td>
+                    <button type="button" (click)="removeLot(i)">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</form>

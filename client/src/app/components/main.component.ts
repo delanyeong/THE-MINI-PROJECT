@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Entry } from '../models';
-import { PostService } from '../post.service';
-
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Lot, LotDraw } from '../models';
 
 @Component({
   selector: 'app-main',
@@ -10,41 +8,52 @@ import { PostService } from '../post.service';
   styleUrls: ['./main.component.css']
 })
 
-@Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
-})
 export class MainComponent implements OnInit{
 
-  form!: FormGroup
+  drawLotForm!: FormGroup
+  lotArray!: FormArray
 
-  constructor (private fb: FormBuilder, private postSvc: PostService) { }
+  constructor (private fb: FormBuilder) { }
 
   ngOnInit(): void {
-      this.form = this.createForm();
+      this.drawLotForm = this.createForm()
   }
 
   createForm(): FormGroup {
+    this.lotArray = this.fb.array([], [ Validators.minLength(1) ])
     return this.fb.group({
-      username: this.fb.control('', [ Validators.required, Validators.minLength(3)]),
-      restaurant: this.fb.control('', [ Validators.required, Validators.minLength(3)])
+      date: this.fb.control('', [ Validators.required, Validators.minLength(3)]),
+      meal: this.fb.control('', [ Validators.required, Validators.minLength(3)]),
+      lots: this.lotArray
     })
   }
 
   processForm() {
-    const entry = this.form.value as Entry
+    const lotDraw : LotDraw = this.drawLotForm.value as LotDraw
+    console.info('>>> lotDraw: ', lotDraw)
+  }
 
-    console.info('>>> entry: ', entry)
+  addLot() {
+    this.lotArray.push(this.createLot())
+  }
 
-    this.postSvc.postEntry(entry)
-    .then(response => {
-      console.info(`Restaurant Entry: ${response.restaurant}`)
-      this.form = this.createForm()
+  private createLot(): FormGroup {
+    return this.fb.group({
+      name: this.fb.control('', [ Validators.required ]),
+      restaurant: this.fb.control('', [ Validators.required ])
     })
-    .catch (error => {
-      console.error('>>> error: ', error)
-    })
+  }
+
+  removeLot(i: number) {
+    this.lotArray.removeAt(i)
+  }
+
+  invalid(): boolean {
+    return this.drawLotForm.invalid || this.lotArray.length <= 0
+  }
+
+  clearForm() {
+    this.drawLotForm = this.createForm()
   }
 
 }
